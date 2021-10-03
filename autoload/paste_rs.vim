@@ -13,11 +13,8 @@ function paste_rs#get_url(...) abort "{{{
     let text = paste_rs#get_buffer()
   endif
   let url = system('echo ' . shellescape(text) . ' | curl --silent --data-binary @- https://paste.rs/')
-  if input('Yank to + register? [y/N]') == 'y'
-    call setreg('+', url)
-  endif
-  redraw
-  echohl WarningMsg | echo url | echohl None
+  call paste_rs#yank(url)
+  echohl WarningMsg | echo a:url | echohl None
 endfunction "}}}
 function paste_rs#get_selection(mode) abort "{{{
   let [line_start, column_start] = getpos("'<")[1:2]
@@ -41,6 +38,12 @@ function paste_rs#get_selection(mode) abort "{{{
 endfunction "}}}
 function paste_rs#get_buffer() abort "{{{
   return join(getline(1,'$'), "\n")
+endfunction "}}}
+function paste_rs#yank(url) abort "{{{
+  if input('Yank to + register? [Y/n]') !=# 'n'
+    call setreg('+', a:url)
+  endif
+  redraw
 endfunction "}}}
 
 " vim: set sw=2 ts=2 sts=2 et tw=80 ft=vim fdm=marker fmr={{{,}}}:
