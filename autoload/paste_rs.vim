@@ -21,7 +21,7 @@ function paste_rs#get_url(...) abort "{{{
   endif
   let url = system('echo ' . shellescape(text) . ' | curl --silent --data-binary @- https://paste.rs/')
   let configuration = paste_rs#get_configuration()
-  call paste_rs#yank(url, configuration.register)
+  call paste_rs#yank(url, configuration.register, configuration.yank_url)
   echohl WarningMsg | echo url | echohl None
 endfunction "}}}
 function paste_rs#get_selection(mode) abort "{{{
@@ -47,11 +47,17 @@ endfunction "}}}
 function paste_rs#get_buffer() abort "{{{
   return join(getline(1,'$'), "\n")
 endfunction "}}}
-function paste_rs#yank(url, register) abort "{{{
-  if input('Yank to ' . a:register . ' register? [Y/n]') !=# 'n'
+function paste_rs#yank(url, register, interaction) abort "{{{
+  if a:interaction ==# 'no'
+    return
+  elseif a:interaction ==# 'yes'
     call setreg(a:register, a:url)
+  else
+    if input('Yank to ' . a:register . ' register? [Y/n]') !=# 'n'
+      call setreg(a:register, a:url)
+    endif
+    redraw
   endif
-  redraw
 endfunction "}}}
 
 " vim: set sw=2 ts=2 sts=2 et tw=80 ft=vim fdm=marker fmr={{{,}}}:
