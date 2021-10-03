@@ -6,6 +6,13 @@
 " License: GPL3
 " =============================================================================
 
+function paste_rs#get_configuration() abort "{{{
+  return {
+        \ 'register': get(g:, 'paste_rs_register', '+'),
+        \ 'yank_url': get(g:, 'paste_rs_yank_url', 'ask'),
+        \ 'open_url': get(g:, 'paste_rs_open_url', 'ask'),
+        \ }
+endfunction "}}}
 function paste_rs#get_url(...) abort "{{{
   if a:0 == 1
     let text = paste_rs#get_selection(a:1)
@@ -13,8 +20,9 @@ function paste_rs#get_url(...) abort "{{{
     let text = paste_rs#get_buffer()
   endif
   let url = system('echo ' . shellescape(text) . ' | curl --silent --data-binary @- https://paste.rs/')
-  call paste_rs#yank(url)
-  echohl WarningMsg | echo a:url | echohl None
+  let configuration = paste_rs#get_configuration()
+  call paste_rs#yank(url, configuration.register)
+  echohl WarningMsg | echo url | echohl None
 endfunction "}}}
 function paste_rs#get_selection(mode) abort "{{{
   let [line_start, column_start] = getpos("'<")[1:2]
@@ -39,9 +47,9 @@ endfunction "}}}
 function paste_rs#get_buffer() abort "{{{
   return join(getline(1,'$'), "\n")
 endfunction "}}}
-function paste_rs#yank(url) abort "{{{
-  if input('Yank to + register? [Y/n]') !=# 'n'
-    call setreg('+', a:url)
+function paste_rs#yank(url, register) abort "{{{
+  if input('Yank to ' . a:register . ' register? [Y/n]') !=# 'n'
+    call setreg(a:register, a:url)
   endif
   redraw
 endfunction "}}}
