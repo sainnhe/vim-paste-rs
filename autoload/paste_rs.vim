@@ -6,8 +6,12 @@
 " License: GPL3
 " =============================================================================
 
-function paste_rs#get_url(mode) abort "{{{
-  let text = paste_rs#get_selection(a:mode)
+function paste_rs#get_url(...) abort "{{{
+  if a:0 == 1
+    let text = paste_rs#get_selection(a:1)
+  else
+    let text = paste_rs#get_buffer()
+  endif
   let url = system('echo ' . shellescape(text) . ' | curl --silent --data-binary @- https://paste.rs/')
   if input('Yank to + register? [y/N]') == 'y'
     call setreg('+', url)
@@ -34,6 +38,9 @@ function paste_rs#get_selection(mode) abort "{{{
     return ''
   endif
   return join(lines, "\n")
+endfunction "}}}
+function paste_rs#get_buffer() abort "{{{
+  return join(getline(1,'$'), "\n")
 endfunction "}}}
 
 " vim: set sw=2 ts=2 sts=2 et tw=80 ft=vim fdm=marker fmr={{{,}}}:

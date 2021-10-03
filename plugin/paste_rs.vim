@@ -7,3 +7,4 @@
 " =============================================================================
 
 xnoremap <plug>(paste-rs) :<C-u>call paste_rs#get_url(visualmode())<Cr>
+nnoremap <plug>(paste-rs) :<C-u>call paste_rs#get_url()<Cr>
