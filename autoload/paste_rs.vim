@@ -13,20 +13,6 @@ function paste_rs#get_configuration() abort "{{{
         \ 'open_url': get(g:, 'paste_rs_open_url', 'ask'),
         \ }
 endfunction "}}}
-function paste_rs#get_url(...) abort "{{{
-  if a:0 == 1
-    let text = paste_rs#get_selection(a:1)
-  else
-    let text = paste_rs#get_buffer()
-  endif
-  let url_raw = split(system('echo ' . shellescape(text) . ' | curl --silent --data-binary @- https://paste.rs/'), "\n")
-  let url_ext = expand('%:e')
-  let url = url_raw[0] . '.' . url_ext
-  let configuration = paste_rs#get_configuration()
-  call paste_rs#yank(url, configuration.register, configuration.yank_url)
-  call paste_rs#open(url, configuration.open_url)
-  echohl WarningMsg | echo url | echohl None
-endfunction "}}}
 function paste_rs#get_selection(mode) abort "{{{
   let [line_start, column_start] = getpos("'<")[1:2]
   let [line_end, column_end]     = getpos("'>")[1:2]
@@ -45,10 +31,10 @@ function paste_rs#get_selection(mode) abort "{{{
   else
     return ''
   endif
-  return join(lines, "\n")
+  return lines
 endfunction "}}}
 function paste_rs#get_buffer() abort "{{{
-  return join(getline(1,'$'), "\n")
+  return getline(1,'$')
 endfunction "}}}
 function paste_rs#yank(url, register, interaction) abort "{{{
   if a:interaction ==# 'no'
@@ -85,6 +71,23 @@ function paste_rs#open(url, interaction) abort "{{{
     endif
     redraw
   endif
+endfunction "}}}
+function paste_rs#get_url(...) abort "{{{
+  if a:0 == 1
+    let text = paste_rs#get_selection(a:1)
+  else
+    let text = paste_rs#get_buffer()
+  endif
+  let temp_file_path = tempname()
+  call writefile(text, temp_file_path, 'a')
+  let url_raw = split(system('curl --silent --data-binary @' . temp_file_path . ' https://paste.rs/'), "\n")
+  call delete(temp_file_path)
+  let url_ext = expand('%:e')
+  let url = url_raw[0] . '.' . url_ext
+  let configuration = paste_rs#get_configuration()
+  call paste_rs#yank(url, configuration.register, configuration.yank_url)
+  call paste_rs#open(url, configuration.open_url)
+  echohl WarningMsg | echo url | echohl None
 endfunction "}}}
 
 " vim: set sw=2 ts=2 sts=2 et tw=80 ft=vim fdm=marker fmr={{{,}}}:
