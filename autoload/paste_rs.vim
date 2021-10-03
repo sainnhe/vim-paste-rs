@@ -19,7 +19,9 @@ function paste_rs#get_url(...) abort "{{{
   else
     let text = paste_rs#get_buffer()
   endif
-  let url = system('echo ' . shellescape(text) . ' | curl --silent --data-binary @- https://paste.rs/')
+  let url_raw = split(system('echo ' . shellescape(text) . ' | curl --silent --data-binary @- https://paste.rs/'), "\n")
+  let url_ext = expand('%:e')
+  let url = url_raw[0] . '.' . url_ext
   let configuration = paste_rs#get_configuration()
   call paste_rs#yank(url, configuration.register, configuration.yank_url)
   call paste_rs#open(url, configuration.open_url)
