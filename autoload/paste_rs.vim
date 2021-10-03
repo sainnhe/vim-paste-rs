@@ -83,7 +83,9 @@ function paste_rs#get_url(...) abort "{{{
   let url_raw = split(system('curl --silent --data-binary @' . temp_file_path . ' https://paste.rs/'), "\n")
   call delete(temp_file_path)
   let url_ext = expand('%:e')
-  let url = url_raw[0] . '.' . url_ext
+  let url = url_ext ==# '' ?
+        \ url_raw[0] :
+        \ url_raw[0] . '.' . url_ext
   let configuration = paste_rs#get_configuration()
   call paste_rs#yank(url, configuration.register, configuration.yank_url)
   call paste_rs#open(url, configuration.open_url)
