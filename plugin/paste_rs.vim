@@ -6,5 +6,5 @@
 " License: GPL3
 " =============================================================================
 
-xnoremap <plug>(paste-rs) :<C-u>call paste_rs#get_url(visualmode())<Cr>
-nnoremap <plug>(paste-rs) :<C-u>call paste_rs#get_url()<Cr>
+xnoremap <Plug>(paste-rs) :<C-u>call paste_rs#get_url(visualmode())<Cr>
+nnoremap <Plug>(paste-rs) :<C-u>call paste_rs#get_url()<Cr>
