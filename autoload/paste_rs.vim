@@ -22,6 +22,7 @@ function paste_rs#get_url(...) abort "{{{
   let url = system('echo ' . shellescape(text) . ' | curl --silent --data-binary @- https://paste.rs/')
   let configuration = paste_rs#get_configuration()
   call paste_rs#yank(url, configuration.register, configuration.yank_url)
+  call paste_rs#open(url, configuration.open_url)
   echohl WarningMsg | echo url | echohl None
 endfunction "}}}
 function paste_rs#get_selection(mode) abort "{{{
@@ -55,6 +56,30 @@ function paste_rs#yank(url, register, interaction) abort "{{{
   else
     if input('Yank to ' . a:register . ' register? [Y/n]') !=# 'n'
       call setreg(a:register, a:url)
+    endif
+    redraw
+  endif
+endfunction "}}}
+function paste_rs#open(url, interaction) abort "{{{
+  if a:interaction ==# 'no'
+    return
+  elseif a:interaction ==# 'yes'
+    if has('win32')
+      call system('explorer ' . a:url)
+    elseif has('mac')
+      call system('open ' . a:url)
+    else
+      call system('xdg-open ' . a:url)
+    endif
+  else
+    if input('Open URL with default browser? [Y/n]') !=# 'n'
+      if has('win32')
+        call system('explorer ' . a:url)
+      elseif has('mac')
+        call system('open ' . a:url)
+      else
+        call system('xdg-open ' . a:url)
+      endif
     endif
     redraw
   endif
