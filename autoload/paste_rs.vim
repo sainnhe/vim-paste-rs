@@ -80,7 +80,25 @@ function paste_rs#get_url(...) abort "{{{
   endif
   let temp_file_path = tempname()
   call writefile(text, temp_file_path, 'a')
-  let url_raw = split(system('curl --silent --data-binary @' . temp_file_path . ' https://paste.rs/'), "\n")
+  if has('win32')
+    let orig_vars = {
+          \ 'shell': &shell,
+          \ 'shellcmdflag': &shellcmdflag,
+          \ 'shellquote': &shellquote,
+          \ 'shellxquote': &shellxquote
+          \ }
+    set shell=powershell
+    set shellcmdflag=-c
+    set shellquote=\"
+    set shellxquote=
+    let url_raw = split(system('Invoke-RestMethod -Uri "https://paste.rs" -Method Post -InFile ' . temp_file_path), "\n")
+    execute 'set shell=' . orig_vars.shell
+    execute 'set shellcmdflag=' . orig_vars.shellcmdflag
+    execute 'set shellquote=' . orig_vars.shellquote
+    execute 'set shellxquote=' . orig_vars.shellxquote
+  else
+    let url_raw = split(system('curl --silent --data-binary @' . temp_file_path . ' https://paste.rs/'), "\n")
+  endif
   call delete(temp_file_path)
   let url_ext = expand('%:e')
   let url = url_ext ==# '' ?
