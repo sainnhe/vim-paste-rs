@@ -1,6 +1,6 @@
 ## Introduction
 
-This is a simple vim plugin for [https://paste.rs/](https://paste.rs/), written in pure vim script.
+This is a simple vim plugin for pasting content to [https://paste.rs/](https://paste.rs/), written in pure vim script.
 
 The following features are supported:
 
