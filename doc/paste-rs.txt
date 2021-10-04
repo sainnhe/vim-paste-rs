@@ -78,20 +78,20 @@ Put something like this in your vimrc:
 Now, press `<leader>P` in normal or visual mode to paste the content to
 https://paste.rs/.
 
-To delete a paste, use |:PasteRsDeleteUrl| command.
+To delete a paste, use |:PasteRsDelete| command.
 
 ==============================================================================
 COMMANDS                                                     *paste-rs-commands*
 
 ------------------------------------------------------------------------------
-                                                             *:PasteRsDeleteUrl*
-:PasteRsDeleteUrl~
+                                                                *:PasteRsDelete*
+:PasteRsDelete~
 
 Delete a paste with the given id.
 
 E.g.
 >
-    :PasteRsDeleteUrl 'https://paste.rs/<id>'
+    :PasteRsDelete 'https://paste.rs/<id>'
 <
 ==============================================================================
 MAPPINGS                                                     *paste-rs-mappings*
