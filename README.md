@@ -7,7 +7,7 @@ The following features are supported:
 - Paste the content of current buffer.
 - Paste selected text.
 - Automatically detect current file type and return corresponding URL.
-- Delete returned URL.
+- Delete a paste.
 - Yank returned URL to a given register.
 - Open returned URL with default browser.
 
