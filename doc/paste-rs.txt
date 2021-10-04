@@ -84,6 +84,18 @@ To delete a paste, use |:PasteRsDelete| command.
 COMMANDS                                                     *paste-rs-commands*
 
 ------------------------------------------------------------------------------
+                                                             *:PasteRsAddBuffer*
+:PasteRsAddBuffer~
+
+Create a new paste with the content of current buffer.
+
+------------------------------------------------------------------------------
+                                                          *:PasteRsAddSelection*
+:PasteRsAddSelection~
+
+Create a new paste with the content of selected text.
+
+------------------------------------------------------------------------------
                                                                 *:PasteRsDelete*
 :PasteRsDelete~
 
