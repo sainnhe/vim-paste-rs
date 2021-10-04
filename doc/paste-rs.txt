@@ -1,0 +1,119 @@
+*paste-rs.txt*
+
+CONTENTS                                     *paste-rs-contents*
+
+Introduction                                 |paste-rs-introduction|
+Installation                                 |paste-rs-installation|
+Usage                                        |paste-rs-usage|
+Configuration                                |paste-rs-configuration|
+
+Note: Type |gO| to show the outline of contents.
+
+==============================================================================
+INTRODUCTION                                             *paste-rs-introduction*
+
+This is a simple vim plugin for https://paste.rs/, written in pure vim script.
+
+The following features are supported:
+
+- Paste the content of current buffer.
+- Paste selected text.
+- Automatically detect current file type and return corresponding URL.
+- Yank returned URL to a given register.
+- Open returned URL with default browser.
+
+==============================================================================
+INSTALLATION                                             *paste-rs-installation*
+
+------------------------------------------------------------------------------
+
+Via Plugin Manager~
+
+    Take [vim-plug](https://github.com/junegunn/vim-plug) for example:
+>
+        Plug 'sainnhe/vim-paste-rs'
+<
+------------------------------------------------------------------------------
+
+Via Pack Feature~
+
+    1. Create a new directory: `$ mkdir -p ~/.vim/pack/plugins/opt`
+
+    2. Clone this repository: `$ git clone --depth 1 https://github.com/sainnhe/vim-paste-rs.git ~/.vim/pack/plugins/opt/vim-paste-rs`
+
+    3. Generate help tags: `:helptags ~/.vim/pack/plugin/opt/vim-paste-rs/doc/`
+
+    4. Add `packadd! vim-paste-rs` to your vimrc.
+
+------------------------------------------------------------------------------
+
+Manually~
+
+    1. Clone the repository: `git clone --depth 1 https://github.com/sainnhe/vim-paste-rs.git`
+
+    2. Copy `/path/to/vim-paste-rs/autoload/paste_rs.vim` to
+    `~/.vim/autoload/` .
+
+    3. Copy `/path/to/vim-paste-rs/plugin/paste_rs.vim` to
+    `~/.vim/plugin/` .
+
+    4. Copy `/path/to/vim-paste-rs/doc/paste-rs.txt` to
+    `~/.vim/doc/` and execute `:helptags ~/.vim/doc/` to generate help tags.
+
+==============================================================================
+USAGE                                                           *paste-rs-usage*
+
+Put something like this in your vimrc:
+>
+    " Normal mode mapping, paste the content of current buffer
+    nmap <leader>P <Plug>(paste-rs)
+
+    " Visual mode mapping, paste selected text
+    xmap <leader>P <Plug>(paste-rs)
+>
+See |paste-rs-configuration| for configuration options.
+
+==============================================================================
+CONFIGURATION                                           *paste-rs-configuration*
+
+------------------------------------------------------------------------------
+                                                           *g:paste_rs_yank_url*
+g:paste_rs_yank_url~
+
+Whether to yank returned URL.
+
+    Available values: `'yes'`, `'no'`, `'ask'`
+    Default value: `'ask'`
+
+E.g.
+>
+    let g:paste_rs_yank_url = 'yes'
+<
+------------------------------------------------------------------------------
+                                                           *g:paste_rs_open_url*
+g:paste_rs_open_url~
+
+Whether to open returned URL with default browser.
+
+    Available values: `'yes'`, `'no'`, `'ask'`
+    Default value: `'ask'`
+
+E.g.
+>
+    let g:paste_rs_open_url = 'yes'
+<
+------------------------------------------------------------------------------
+                                                           *g:paste_rs_register*
+g:paste_rs_register~
+
+The register to yank returned URL to.
+
+    Available values: See |registers|
+    Default value: `'+'`
+
+E.g.
+>
+    let g:paste_rs_register = '*'
+<
+==============================================================================
+vim:tw=78:nosta:noet:ts=8:sts=0:ft=help:et:sw=4:fen:fdm=marker:fmr={{{,}}}:
