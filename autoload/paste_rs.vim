@@ -72,6 +72,29 @@ function paste_rs#open(url, interaction) abort "{{{
     redraw
   endif
 endfunction "}}}
+function paste_rs#powershell(cmd) abort "{{{
+  let orig_vars = {
+        \ 'shell': &shell,
+        \ 'shellcmdflag': &shellcmdflag,
+        \ 'shellredir': &shellredir,
+        \ 'shellpipe': &shellpipe,
+        \ 'shellquote': &shellquote,
+        \ 'shellxquote': &shellxquote
+        \ }
+  let &shell = 'powershell'
+  let &shellcmdflag = '-NoLogo -NoProfile -ExecutionPolicy RemoteSigned -Command [Console]::InputEncoding=[Console]::OutputEncoding=[System.Text.Encoding]::UTF8;'
+  let &shellredir = '2>&1 | Out-File -Encoding UTF8 %s; exit $LastExitCode'
+  let &shellpipe = '2>&1 | Out-File -Encoding UTF8 %s; exit $LastExitCode'
+  set shellquote= shellxquote=
+  let info = split(system(a:cmd), "\n")
+  let &shell = orig_vars.shell
+  let &shellcmdflag = orig_vars.shellcmdflag
+  let &shellredir = orig_vars.shellredir
+  let &shellpipe = orig_vars.shellpipe
+  let &shellquote = orig_vars.shellquote
+  let &shellxquote = orig_vars.shellxquote
+  return info
+endfunction "}}}
 function paste_rs#get_url(...) abort "{{{
   if a:0 == 1
     let text = paste_rs#get_selection(a:1)
@@ -81,21 +104,7 @@ function paste_rs#get_url(...) abort "{{{
   let temp_file_path = tempname()
   call writefile(text, temp_file_path, 'a')
   if has('win32')
-    let orig_vars = {
-          \ 'shell': &shell,
-          \ 'shellcmdflag': &shellcmdflag,
-          \ 'shellquote': &shellquote,
-          \ 'shellxquote': &shellxquote
-          \ }
-    set shell=powershell
-    set shellcmdflag=-c
-    set shellquote=\"
-    set shellxquote=
-    let url_raw = split(system('Invoke-RestMethod -Uri "https://paste.rs" -Method Post -InFile ' . temp_file_path), "\n")
-    execute 'set shell=' . orig_vars.shell
-    execute 'set shellcmdflag=' . orig_vars.shellcmdflag
-    execute 'set shellquote=' . orig_vars.shellquote
-    execute 'set shellxquote=' . orig_vars.shellxquote
+    let url_raw = paste_rs#powershell('Invoke-RestMethod -Uri "https://paste.rs" -Method Post -InFile ' . temp_file_path)
   else
     let url_raw = split(system('curl --silent --data-binary @' . temp_file_path . ' https://paste.rs/'), "\n")
   endif
@@ -111,21 +120,7 @@ function paste_rs#get_url(...) abort "{{{
 endfunction "}}}
 function paste_rs#delete(url) abort "{{{
   if has('win32')
-    let orig_vars = {
-          \ 'shell': &shell,
-          \ 'shellcmdflag': &shellcmdflag,
-          \ 'shellquote': &shellquote,
-          \ 'shellxquote': &shellxquote
-          \ }
-    set shell=powershell
-    set shellcmdflag=-c
-    set shellquote=\"
-    set shellxquote=
-    let info = split(system('Invoke-RestMethod -Uri ' . a:url . ' -Method Delete'), "\n")
-    execute 'set shell=' . orig_vars.shell
-    execute 'set shellcmdflag=' . orig_vars.shellcmdflag
-    execute 'set shellquote=' . orig_vars.shellquote
-    execute 'set shellxquote=' . orig_vars.shellxquote
+    let info = paste_rs#powershell('Invoke-RestMethod -Uri ' . a:url . ' -Method Delete')
   else
     let info = split(system('curl --silent -X DELETE ' . a:url), "\n")
   endif
