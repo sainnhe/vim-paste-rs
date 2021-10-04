@@ -109,5 +109,27 @@ function paste_rs#get_url(...) abort "{{{
   call paste_rs#open(url, configuration.open_url)
   echohl WarningMsg | echo url | echohl None
 endfunction "}}}
+function paste_rs#delete(url) abort "{{{
+  if has('win32')
+    let orig_vars = {
+          \ 'shell': &shell,
+          \ 'shellcmdflag': &shellcmdflag,
+          \ 'shellquote': &shellquote,
+          \ 'shellxquote': &shellxquote
+          \ }
+    set shell=powershell
+    set shellcmdflag=-c
+    set shellquote=\"
+    set shellxquote=
+    let info = split(system('Invoke-RestMethod -Uri ' . a:url . ' -Method Delete'), "\n")
+    execute 'set shell=' . orig_vars.shell
+    execute 'set shellcmdflag=' . orig_vars.shellcmdflag
+    execute 'set shellquote=' . orig_vars.shellquote
+    execute 'set shellxquote=' . orig_vars.shellxquote
+  else
+    let info = split(system('curl --silent -X DELETE ' . a:url), "\n")
+  endif
+  echohl WarningMsg | echo info[0] | echohl None
+endfunction "}}}
 
 " vim: set sw=2 ts=2 sts=2 et tw=80 ft=vim fdm=marker fmr={{{,}}}:

@@ -8,3 +8,4 @@
 
 xnoremap <silent> <Plug>(paste-rs) :<C-u>call paste_rs#get_url(visualmode())<Cr>
 nnoremap <silent> <Plug>(paste-rs) :<C-u>call paste_rs#get_url()<Cr>
+command -nargs=1 PasteRsDeleteUrl call paste_rs#delete(<args>)

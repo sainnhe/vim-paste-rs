@@ -19,6 +19,7 @@ The following features are supported:
 - Paste the content of current buffer.
 - Paste selected text.
 - Automatically detect current file type and return corresponding URL.
+- Delete returned URL.
 - Yank returned URL to a given register.
 - Open returned URL with default browser.
 
@@ -70,6 +71,13 @@ Put something like this in your vimrc:
 
     " Visual mode mapping, paste selected text
     xmap <leader>P <Plug>(paste-rs)
+>
+Now, press `<leader>P` in normal mode or visual mode to paste content to
+https://paste.rs/.
+
+To delete a URL, execute the following command:
+>
+    :PasteRsDeleteUrl 'https://paste.rs/<id>'
 >
 See |paste-rs-configuration| for configuration options.
 
