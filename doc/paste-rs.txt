@@ -5,6 +5,8 @@ CONTENTS                                     *paste-rs-contents*
 Introduction                                 |paste-rs-introduction|
 Installation                                 |paste-rs-installation|
 Usage                                        |paste-rs-usage|
+Commands                                     |paste-rs-commands|
+Mappings                                     |paste-rs-mappings|
 Configuration                                |paste-rs-configuration|
 
 Note: Type |gO| to show the outline of contents.
@@ -72,15 +74,38 @@ Put something like this in your vimrc:
     " Visual mode mapping, paste selected text
     xmap <leader>P <Plug>(paste-rs)
 >
-Now, press `<leader>P` in normal mode or visual mode to paste content to
+Now, press `<leader>P` in normal or visual mode to paste the content to
 https://paste.rs/.
 
-To delete a URL, execute the following command:
+To delete a paste, use |:PasteRsDeleteUrl| command.
+
+==============================================================================
+COMMANDS                                                     *paste-rs-commands*
+
+------------------------------------------------------------------------------
+                                                             *:PasteRsDeleteUrl*
+:PasteRsDeleteUrl~
+
+Delete a paste with the given id.
+
+E.g.
 >
     :PasteRsDeleteUrl 'https://paste.rs/<id>'
->
-See |paste-rs-configuration| for configuration options.
+<
+==============================================================================
+MAPPINGS                                                     *paste-rs-mappings*
 
+------------------------------------------------------------------------------
+                                                              *<Plug>(paste-rs)*
+<Plug>(paste-rs)~
+
+Paste the content to https://paste.rs/, support both normal and visual mode.
+
+E.g.
+>
+    nmap <leader>P <Plug>(paste-rs)
+    xmap <leader>P <Plug>(paste-rs)
+<
 ==============================================================================
 CONFIGURATION                                           *paste-rs-configuration*
 
