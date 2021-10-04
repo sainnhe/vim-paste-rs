@@ -4,7 +4,6 @@ CONTENTS                                     *paste-rs-contents*
 
 Introduction                                 |paste-rs-introduction|
 Installation                                 |paste-rs-installation|
-Usage                                        |paste-rs-usage|
 Commands                                     |paste-rs-commands|
 Mappings                                     |paste-rs-mappings|
 Configuration                                |paste-rs-configuration|
@@ -65,22 +64,6 @@ Manually~
     `~/.vim/doc/` and execute `:helptags ~/.vim/doc/` to generate help tags.
 
 ==============================================================================
-USAGE                                                           *paste-rs-usage*
-
-Put something like this in your vimrc:
->
-    " Normal mode mapping, paste the content of current buffer
-    nmap <leader>P <Plug>(paste-rs)
-
-    " Visual mode mapping, paste selected text
-    xmap <leader>P <Plug>(paste-rs)
->
-Now, press `<leader>P` in normal or visual mode to paste the content to
-https://paste.rs/.
-
-To delete a paste, use |:PasteRsDelete| command.
-
-==============================================================================
 COMMANDS                                                     *paste-rs-commands*
 
 ------------------------------------------------------------------------------
@@ -93,7 +76,7 @@ Create a new paste with the content of current buffer.
                                                           *:PasteRsAddSelection*
 :PasteRsAddSelection~
 
-Create a new paste with the content of selected text.
+Create a new paste with selected text.
 
 ------------------------------------------------------------------------------
                                                                 *:PasteRsDelete*
@@ -116,7 +99,10 @@ Paste the content to https://paste.rs/, support both normal and visual mode.
 
 E.g.
 >
+    " Normal mode mapping, paste the content of current buffer
     nmap <leader>P <Plug>(paste-rs)
+
+    " Visual mode mapping, paste selected text
     xmap <leader>P <Plug>(paste-rs)
 <
 ==============================================================================
