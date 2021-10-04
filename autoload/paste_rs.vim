@@ -76,21 +76,15 @@ function paste_rs#powershell(cmd) abort "{{{
   let orig_vars = {
         \ 'shell': &shell,
         \ 'shellcmdflag': &shellcmdflag,
-        \ 'shellredir': &shellredir,
-        \ 'shellpipe': &shellpipe,
         \ 'shellquote': &shellquote,
         \ 'shellxquote': &shellxquote
         \ }
   let &shell = 'powershell'
   let &shellcmdflag = '-NoLogo -NoProfile -ExecutionPolicy RemoteSigned -Command [Console]::InputEncoding=[Console]::OutputEncoding=[System.Text.Encoding]::UTF8;'
-  let &shellredir = '2>&1 | Out-File -Encoding UTF8 %s; exit $LastExitCode'
-  let &shellpipe = '2>&1 | Out-File -Encoding UTF8 %s; exit $LastExitCode'
   set shellquote= shellxquote=
   let info = split(system(a:cmd), "\n")
   let &shell = orig_vars.shell
   let &shellcmdflag = orig_vars.shellcmdflag
-  let &shellredir = orig_vars.shellredir
-  let &shellpipe = orig_vars.shellpipe
   let &shellquote = orig_vars.shellquote
   let &shellxquote = orig_vars.shellxquote
   return info
